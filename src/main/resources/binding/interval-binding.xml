@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<jaxb:bindings xmlns:jaxb="https://jakarta.ee/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema"
+               xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/" xmlns:jaxws="http://java.sun.com/xml/ns/jaxws"
+               xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+               xsi:schemaLocation="http://java.sun.com/xml/ns/jaxb http://java.sun.com/xml/ns/jaxb/bindingschema_2_0.xsd"
+               version="3.0">
+    <jaxb:globalBindings generateElementProperty="false">
+        <xjc:serializable/>
+        <xjc:simple/>
+        <!-- Use java.util.Calendar instead of javax.xml.datatype.XMLGregorianCalendar for xs:dateTime -->
+        <xjc:javaType name="java.lang.String" xmlType="xs:dateTime"
+                       adapter="ru.iflex.esb.adapter.argus.xml.adapter.StringAdapter"
+                        />
+    </jaxb:globalBindings>
+</jaxb:bindings>

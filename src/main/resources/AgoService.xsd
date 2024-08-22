@@ -1,0 +1,133 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<xs:schema version="1.0" targetNamespace="http://simple.ago.example/"
+           xmlns:tns="http://simple.ago.example/"
+           xmlns:xs="http://www.w3.org/2001/XMLSchema"
+           elementFormDefault="qualified"
+           xmlns:jaxb="http://java.sun.com/xml/ns/jaxb"
+           jaxb:version="2.1">
+
+
+
+    <xs:element name="StartCallResponse" type="tns:BaseAGOResponse"/>
+    <xs:element name="StopCallResponse" type="tns:BaseAGOResponse"/>
+    <xs:element name="UpdateDebtResponse" type="tns:BaseAGOResponse"/>
+    <xs:element name="GetStatusResponse" type="tns:GetStatusResponse"/>
+    <xs:element name="DebtCallFault" type="tns:DebtCallFault"/>
+    <xs:element name="CloseSeasonResponse" type="tns:BaseAGOResponse"/>
+    <xs:element name="CloseSeasonRequest" type="tns:CloseSeasonRequest"/>
+
+    <xs:complexType name="BaseAGORequest">
+        <xs:sequence>
+            <xs:element name="AppPkId" type="xs:long" minOccurs="1"/>
+            <xs:element name="ASRClientId" type="xs:long" minOccurs="1"/>
+            <xs:element name="Msisdn" type="xs:string" minOccurs="1"/>
+            <xs:element name="NotificationType" type="tns:NotificationTypeEnum" minOccurs="1"/>
+            <xs:element name="Juridical" type="tns:Juridical" minOccurs="1"/>
+            <xs:element name="Account" type="xs:string" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="BaseAGOResponse">
+        <xs:sequence>
+            <xs:element name="resultCode" type="xs:long" minOccurs="1"/>
+            <xs:element name="message" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:element name="GetStatusRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Id" type="xs:long" minOccurs="1"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="StartCallRequest">
+        <xs:complexType>
+            <xs:complexContent>
+                <xs:extension base="tns:BaseAGORequest">
+                    <xs:sequence>
+                        <xs:element name="Debt" type="xs:double" minOccurs="1"/>
+                        <xs:element name="Debt1" type="xs:double" minOccurs="0"/>
+                        <xs:element name="Debt2" type="xs:double" minOccurs="0"/>
+                        <xs:element name="Debt3" type="xs:double" minOccurs="0"/>
+                        <xs:element name="Debt4" type="xs:double" minOccurs="0"/>
+                        <xs:element name="TerminationDate" type="xs:dateTime" minOccurs="1"/>
+                        <xs:element name="PaymentDate" type="xs:dateTime" minOccurs="1"/>
+                        <xs:element name="Reason" type="xs:string" minOccurs="0"/>
+                    </xs:sequence>
+                </xs:extension>
+            </xs:complexContent>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="StopCallRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Id" type="xs:long" minOccurs="1"/>
+                <xs:element name="Reason" type="xs:string" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:element name="UpdateDebtRequest">
+        <xs:complexType>
+            <xs:sequence>
+                <xs:element name="Id" type="xs:long" minOccurs="1"/>
+                <xs:element name="Debt" type="xs:double" minOccurs="1"/>
+                <xs:element name="Debt1" type="xs:double" minOccurs="0"/>
+                <xs:element name="Debt2" type="xs:double" minOccurs="0"/>
+                <xs:element name="Debt3" type="xs:double" minOccurs="0"/>
+                <xs:element name="Debt4" type="xs:double" minOccurs="0"/>
+            </xs:sequence>
+        </xs:complexType>
+    </xs:element>
+
+    <xs:complexType name="GetStatusResponse">
+        <xs:sequence>
+            <xs:element name="Status" type="tns:Status" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="CloseSeasonRequest">
+        <xs:sequence>
+            <xs:element name="NotificationType" type="xs:string" minOccurs="1"/>
+            <xs:element name="DateEnd" type="xs:dateTime" minOccurs="1"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:complexType name="DebtCallFault">
+        <xs:sequence>
+            <xs:element name="Code" type="xs:int" minOccurs="1"/>
+            <xs:element name="Message" type="xs:string" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+
+    <xs:simpleType name="NotificationTypeEnum">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="PREVENTIVE"/>
+            <xs:enumeration value="WARNING"/>
+            <xs:enumeration value="INFO"/>
+            <xs:enumeration value="PREVENTIVE_ADD"/>
+            <xs:enumeration value="WARNING_ADD"/>
+            <xs:enumeration value="INFO_ADD"/>
+            <xs:enumeration value="DENUNCIATION"/>
+            <xs:enumeration value="DENUNCIATION_ADD"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:simpleType name="Juridical">
+        <xs:restriction base="xs:string">
+            <xs:enumeration value="HUMAN"/>
+            <xs:enumeration value="ORGANIZATION"/>
+        </xs:restriction>
+    </xs:simpleType>
+
+    <xs:complexType name="Status">
+        <xs:sequence>
+            <xs:element name="Status" type="xs:string" minOccurs="1"/>
+            <xs:element name="StatusMessage" type="xs:string" minOccurs="0"/>
+            <xs:element name="CompleteDate" type="xs:dateTime" minOccurs="0"/>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

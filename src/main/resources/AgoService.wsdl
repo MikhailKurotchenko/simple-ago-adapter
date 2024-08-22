@@ -1,0 +1,252 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<definitions targetNamespace="http://simple.ago.example/" name="AgoService"
+             xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/"
+             xmlns:wsu="http://docs.oasis-open.org/wss/2004/01/oasis-200401-wss-wssecurity-utility-1.0.xsd"
+             xmlns:wsp="http://www.w3.org/ns/ws-policy" xmlns:wsp1_2="http://schemas.xmlsoap.org/ws/2004/09/policy"
+             xmlns:tns="http://simple.ago.example/"
+             xmlns:wsam="http://www.w3.org/2007/05/addressing/metadata"
+             xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+             xmlns="http://schemas.xmlsoap.org/wsdl/">
+    <types>
+        <xs:schema xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" xmlns:xs="http://www.w3.org/2001/XMLSchema" elementFormDefault="qualified" jaxb:version="2.1" targetNamespace="http://simple.ago.example/" version="1.0">
+            <xs:element name="StartCallResponse" type="tns:BaseAGOResponse"/>
+            <xs:element name="StopCallResponse" type="tns:BaseAGOResponse"/>
+            <xs:element name="UpdateDebtResponse" type="tns:BaseAGOResponse"/>
+            <xs:element name="GetStatusResponse" type="tns:GetStatusResponse"/>
+            <xs:element name="DebtCallFault" type="tns:DebtCallFault"/>
+            <xs:element name="CloseSeasonResponse" type="tns:BaseAGOResponse"/>
+            <xs:element name="CloseSeasonRequest" type="tns:CloseSeasonRequest"/>
+            <xs:complexType name="BaseAGORequest">
+                <xs:sequence>
+                    <xs:element minOccurs="1" name="AppPkId" type="xs:long"/>
+                    <xs:element minOccurs="1" name="ASRClientId" type="xs:long"/>
+                    <xs:element minOccurs="1" name="Msisdn" type="xs:string"/>
+                    <xs:element minOccurs="1" name="NotificationType" type="tns:NotificationTypeEnum"/>
+                    <xs:element minOccurs="1" name="Juridical" type="tns:Juridical"/>
+                    <xs:element minOccurs="1" name="Account" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="BaseAGOResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="1" name="resultCode" type="xs:long"/>
+                    <xs:element minOccurs="0" name="message" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:element name="GetStatusRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="1" name="Id" type="xs:long"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="StartCallRequest">
+                <xs:complexType>
+                    <xs:complexContent>
+                        <xs:extension base="tns:BaseAGORequest">
+                            <xs:sequence>
+                                <xs:element minOccurs="1" name="Debt" type="xs:double"/>
+                                <xs:element minOccurs="0" name="Debt1" type="xs:double"/>
+                                <xs:element minOccurs="0" name="Debt2" type="xs:double"/>
+                                <xs:element minOccurs="0" name="Debt3" type="xs:double"/>
+                                <xs:element minOccurs="0" name="Debt4" type="xs:double"/>
+                                <xs:element minOccurs="1" name="TerminationDate" type="xs:dateTime"/>
+                                <xs:element minOccurs="1" name="PaymentDate" type="xs:dateTime"/>
+                                <xs:element minOccurs="0" name="Reason" type="xs:string"/>
+                            </xs:sequence>
+                        </xs:extension>
+                    </xs:complexContent>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="StopCallRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="1" name="Id" type="xs:long"/>
+                        <xs:element minOccurs="0" name="Reason" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:element name="UpdateDebtRequest">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element minOccurs="1" name="Id" type="xs:long"/>
+                        <xs:element minOccurs="1" name="Debt" type="xs:double"/>
+                        <xs:element minOccurs="0" name="Debt1" type="xs:double"/>
+                        <xs:element minOccurs="0" name="Debt2" type="xs:double"/>
+                        <xs:element minOccurs="0" name="Debt3" type="xs:double"/>
+                        <xs:element minOccurs="0" name="Debt4" type="xs:double"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+            <xs:complexType name="GetStatusResponse">
+                <xs:sequence>
+                    <xs:element minOccurs="1" name="Status" type="tns:Status"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="CloseSeasonRequest">
+                <xs:sequence>
+                    <xs:element minOccurs="1" name="NotificationType" type="xs:string"/>
+                    <xs:element minOccurs="1" name="DateEnd" type="xs:dateTime"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:complexType name="DebtCallFault">
+                <xs:sequence>
+                    <xs:element minOccurs="1" name="Code" type="xs:int"/>
+                    <xs:element minOccurs="0" name="Message" type="xs:string"/>
+                </xs:sequence>
+            </xs:complexType>
+            <xs:simpleType name="NotificationTypeEnum">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="PREVENTIVE"/>
+                    <xs:enumeration value="WARNING"/>
+                    <xs:enumeration value="INFO"/>
+                    <xs:enumeration value="PREVENTIVE_ADD"/>
+                    <xs:enumeration value="WARNING_ADD"/>
+                    <xs:enumeration value="INFO_ADD"/>
+                    <xs:enumeration value="DENUNCIATION"/>
+                    <xs:enumeration value="DENUNCIATION_ADD"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:simpleType name="Juridical">
+                <xs:restriction base="xs:string">
+                    <xs:enumeration value="HUMAN"/>
+                    <xs:enumeration value="ORGANIZATION"/>
+                </xs:restriction>
+            </xs:simpleType>
+            <xs:complexType name="Status">
+                <xs:sequence>
+                    <xs:element minOccurs="1" name="Status" type="xs:string"/>
+                    <xs:element minOccurs="0" name="StatusMessage" type="xs:string"/>
+                    <xs:element minOccurs="0" name="CompleteDate" type="xs:dateTime"/>
+                </xs:sequence>
+            </xs:complexType>
+        </xs:schema>
+    </types>
+    <message name="StartCallRequest">
+        <part name="request" element="tns:StartCallRequest"/>
+    </message>
+    <message name="StartCallResponse">
+        <part name="response" element="tns:StartCallResponse"/>
+    </message>
+    <message name="StopCallRequest">
+        <part name="request" element="tns:StopCallRequest"/>
+    </message>
+    <message name="StopCallResponse">
+        <part name="response" element="tns:StopCallResponse"/>
+    </message>
+    <message name="UpdateDebtRequest">
+        <part name="request" element="tns:UpdateDebtRequest"/>
+    </message>
+    <message name="UpdateDebtResponse">
+        <part name="response" element="tns:UpdateDebtResponse"/>
+    </message>
+    <message name="GetStatusRequest">
+        <part name="request" element="tns:GetStatusRequest"/>
+    </message>
+    <message name="GetStatusResponse">
+        <part name="response" element="tns:GetStatusResponse"/>
+    </message>
+    <message name="CloseSeasonRequest">
+        <part name="request" element="tns:CloseSeasonRequest"/>
+    </message>
+    <message name="CloseSeasonResponse">
+        <part name="response" element="tns:CloseSeasonResponse"/>
+    </message>
+    <message name="DebtCallFault">
+        <part name="fault" element="tns:DebtCallFault"/>
+    </message>
+    <portType name="AgoService">
+        <operation name="StartCall">
+            <input wsam:Action="http://simple.ago.example/AgoService/StartCallRequest" message="tns:StartCallRequest"/>
+            <output wsam:Action="http://simple.ago.example/AgoService/StartCallResponse" message="tns:StartCallResponse"/>
+            <fault message="tns:DebtCallFault" name="DebtCallFault" wsam:Action="http://simple.ago.example/AgoService/StartCall/Fault/DebtCallFault"/>
+        </operation>
+        <operation name="StopCall">
+            <input wsam:Action="http://simple.ago.example/AgoService/StopCallRequest" message="tns:StopCallRequest"/>
+            <output wsam:Action="http://simple.ago.example/AgoService/StopCallResponse" message="tns:StopCallResponse"/>
+            <fault message="tns:DebtCallFault" name="DebtCallFault" wsam:Action="http://simple.ago.example/AgoService/StopCall/Fault/DebtCallFault"/>
+        </operation>
+        <operation name="UpdateDebt">
+            <input wsam:Action="http://simple.ago.example/AgoService/UpdateDebtRequest" message="tns:UpdateDebtRequest"/>
+            <output wsam:Action="http://simple.ago.example/AgoService/UpdateDebtResponse" message="tns:UpdateDebtResponse"/>
+            <fault message="tns:DebtCallFault" name="DebtCallFault" wsam:Action="http://simple.ago.example/AgoService/UpdateDebt/Fault/DebtCallFault"/>
+        </operation>
+        <operation name="GetStatus">
+            <input wsam:Action="http://simple.ago.example/AgoService/GetStatusRequest" message="tns:GetStatusRequest"/>
+            <output wsam:Action="http://simple.ago.example/AgoService/GetStatusResponse" message="tns:GetStatusResponse"/>
+            <fault message="tns:DebtCallFault" name="DebtCallFault" wsam:Action="http://simple.ago.example/AgoService/GetStatus/Fault/DebtCallFault"/>
+        </operation>
+        <operation name="CloseSeason">
+            <input wsam:Action="http://simple.ago.example/AgoService/CloseSeasonRequest" message="tns:CloseSeasonRequest"/>
+            <output wsam:Action="http://simple.ago.example/AgoService/CloseSeasonResponse" message="tns:CloseSeasonResponse"/>
+            <fault message="tns:DebtCallFault" name="DebtCallFault" wsam:Action="http://simple.ago.example/AgoService/CloseSeason/Fault/DebtCallFault"/>
+        </operation>
+    </portType>
+    <binding name="AgoServicePortBinding" type="tns:AgoService">
+        <soap:binding transport="http://schemas.xmlsoap.org/soap/http" style="document"/>
+        <operation name="StartCall">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="DebtCallFault">
+                <soap:fault name="DebtCallFault" use="literal"/>
+            </fault>
+        </operation>
+        <operation name="StopCall">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="DebtCallFault">
+                <soap:fault name="DebtCallFault" use="literal"/>
+            </fault>
+        </operation>
+        <operation name="UpdateDebt">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="DebtCallFault">
+                <soap:fault name="DebtCallFault" use="literal"/>
+            </fault>
+        </operation>
+        <operation name="GetStatus">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="DebtCallFault">
+                <soap:fault name="DebtCallFault" use="literal"/>
+            </fault>
+        </operation>
+        <operation name="CloseSeason">
+            <soap:operation soapAction=""/>
+            <input>
+                <soap:body use="literal"/>
+            </input>
+            <output>
+                <soap:body use="literal"/>
+            </output>
+            <fault name="DebtCallFault">
+                <soap:fault name="DebtCallFault" use="literal"/>
+            </fault>
+        </operation>
+    </binding>
+    <service name="AgoService">
+        <port name="AgoServicePort" binding="tns:AgoServicePortBinding">
+            <soap:address location="http://localhost:8080/AgoService"/>
+        </port>
+    </service>
+</definitions>
