@@ -10,6 +10,7 @@ public class SimpleAgoAdapterApplication {
 
     public static void main(String[] args) {
         SpringApplication.run(SimpleAgoAdapterApplication.class, args);
+        System.out.println("ТЕСТ");
     }
 
 }
